@@ -94,4 +94,23 @@ you can also delete images that you no longer need by running docker rmi.
 # file by topic
 https://github.com/jasonstewartnz/learning_notes.git
 
+# nice way to present files
+# -l - long format
+# -A - includes hidden files, excludes current and parent directories
+# -F - includes / indicator for directories
+ls -l -AF
 
+git clone https://github.com/jasonstewartnz/learning_notes.git
+
+# show that we have a .git folder
+ls -l -A
+
+
+cd learning_notes/
+ls -l -AF
+# bring file into repository from parent folder
+mv ../recap ./recap
+ls
+ls -l -AF
+
+history | tail -n 50
