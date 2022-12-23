@@ -89,3 +89,9 @@ docker run -it busybox sh
 docker rm $(docker ps -a -q -f status=exited)
 --rm flag that can be passed to docker run which automatically deletes the container once it's exited from.
 you can also delete images that you no longer need by running docker rmi.
+
+
+# file by topic
+https://github.com/jasonstewartnz/learning_notes.git
+
+
