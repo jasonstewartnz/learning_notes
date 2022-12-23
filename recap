@@ -1,0 +1,91 @@
+Recap of pop os learning
+for 
+do 
+	command 
+done
+printf 'Hello, World!'
+
+
+
+ls -l
+chmod u=rwx <filename>
+
+nano
+CTRL+K (cut)
+CTRL+U (paste)
+
+lspci (hardware)
+top (processes)
+ps aux |sort -rnk 4 | head -5
+
+super+shift+down (drags window)
+super+ctrl+down (nagivates only)
+super+m (maximize window/windowed frame)
+
+find . -type f -amin "$recently"
+
+challenge: install presto db
+call it from python
+build something that reads from the net and puts it in a database
+
+# may not be best practice
+$PATH=`cat newpath.txt`
+
+# create sub-terminal
+bash --login
+
+
+# idea should be to rerun .bashrc and start that file with deleting the PATH and rebuilding
+
+# etc is configuration folder
+
+
+
+# virtual envs 
+Great article on virtual env
+https://www.infoworld.com/article/3239675/virtualenv-and-venv-python-virtual-environments-explained.html
+
+
+# create
+python -m venv /path/to/directory
+or 
+virtualenv airflow2
+
+source ./.venv/airflow/bin/activate
+
+copied Airflow install script to airflow_install_script.sh
+set user execute permissions with chmod
+chmod u+x airflow_install_script.sh
+
+standalone | Login with username: admin  password: zkwM4VEKGTNPV7rV
+
+https://airflow.apache.org/docs/apache-airflow/stable/start.html
+
+
+Groups
+/etc/group - contains config
+getent group docker
+
+https://docker-curriculum.com/
+install 
+https://docs.docker.com/engine/install/ubuntu/
+https://docs.docker.com/engine/install/linux-postinstall/
+
+not done: https://docs.docker.com/engine/install/linux-postinstall/#configure-docker-to-start-on-boot-with-systemd
+
+# busybox
+
+docker pull busybox
+docker images
+# run a command within the container
+docker run busybox echo "hello from busybox"
+
+# running interactively with sh
+docker run -it busybox sh
+# It makes sense to spend some time getting comfortable with it. 
+# To find out more about run, use docker run --help to see a list of all flags it supports.
+
+# clean up exited containers
+docker rm $(docker ps -a -q -f status=exited)
+--rm flag that can be passed to docker run which automatically deletes the container once it's exited from.
+you can also delete images that you no longer need by running docker rmi.
