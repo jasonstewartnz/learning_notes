@@ -1,0 +1,8 @@
+
+copied Airflow install script to airflow_install_script.sh
+set user execute permissions with chmod
+chmod u+x airflow_install_script.sh
+
+standalone | Login with username: admin  password: zkwM4VEKGTNPV7rV
+
+https://airflow.apache.org/docs/apache-airflow/stable/start.html

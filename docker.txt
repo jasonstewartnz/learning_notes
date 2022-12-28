@@ -1,0 +1,29 @@
+
+https://docker-curriculum.com/
+install 
+https://docs.docker.com/engine/install/ubuntu/
+https://docs.docker.com/engine/install/linux-postinstall/
+
+Groups
+/etc/group - contains config
+getent group docker
+
+not done: https://docs.docker.com/engine/install/linux-postinstall/#configure-docker-to-start-on-boot-with-systemd
+
+# busybox
+
+docker pull busybox
+docker images
+# run a command within the container
+docker run busybox echo "hello from busybox"
+
+# running interactively with sh
+docker run -it busybox sh
+# It makes sense to spend some time getting comfortable with it. 
+# To find out more about run, use docker run --help to see a list of all flags it supports.
+
+# clean up exited containers
+docker rm $(docker ps -a -q -f status=exited)
+--rm flag that can be passed to docker run which automatically deletes the container once it's exited from.
+you can also delete images that you no longer need by running docker rmi.
+
