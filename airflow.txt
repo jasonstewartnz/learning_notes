@@ -6,3 +6,26 @@ chmod u+x airflow_install_script.sh
 standalone | Login with username: admin  password: zkwM4VEKGTNPV7rV
 
 https://airflow.apache.org/docs/apache-airflow/stable/start.html
+
+
+# initialize the database tables
+airflow db init
+
+# print the list of active DAGs
+airflow dags list
+
+# prints the list of tasks in the "tutorial" DAG
+airflow tasks list tutorial
+
+# prints the hierarchy of tasks in the "tutorial" DAG
+airflow tasks list tutorial --tree
+
+
+airflow tasks test tutorial_copy templated 2015-06-01
+airflow dags test
+
+# goal - call snowflake remote store procedure / task
+
+# Backfill
+# depends_on_past=True individual task instances will depend on the success of their previous task instance
+# logical dates equal to start_date will disregard this dependency 

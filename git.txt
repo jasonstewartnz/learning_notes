@@ -38,3 +38,17 @@ ssh -T git@github.com
 git push
 # authenticated here with new key
 touch git.txt
+
+
+
+
+# setting up git for django (so far )
+  502  git init .
+  503  echo "trydjango/trydjango/__pychache__" >> .gitignore
+  504  git add trydjango/trydjango/
+  505  git status
+  506  git add .gitignore
+  507  git add requirements.txt
+  508  git add trydjango/manage.py
+  509  git commit -m "Initial project commit"
+  510  history
