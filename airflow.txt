@@ -1,4 +1,8 @@
 
+# github discussion group for airflow
+# github discussion group for airflow: https://github.com/apache/airflow/discussions
+
+
 copied Airflow install script to airflow_install_script.sh
 set user execute permissions with chmod
 chmod u+x airflow_install_script.sh
@@ -25,7 +29,50 @@ airflow tasks test tutorial_copy templated 2015-06-01
 airflow dags test
 
 # goal - call snowflake remote store procedure / task
+# https://airflow.apache.org/docs/apache-airflow-providers-snowflake/stable/operators/snowflake.html
+
+# examples/resources
+# https://github.com/apache/airflow/tree/providers-snowflake/4.0.2/tests/system/providers/snowflake
+# https://airflow.apache.org/docs/apache-airflow-providers-snowflake/stable/operators/index.html
+# we can set up the snowflake connection in admin>connetions + "Add a new Record"
 
 # Backfill
 # depends_on_past=True individual task instances will depend on the success of their previous task instance
 # logical dates equal to start_date will disregard this dependency 
+
+https://airflow.apache.org/docs/apache-airflow/stable/tutorial/pipeline.html#building-a-running-pipeline
+
+## Initial setup
+# Download the docker-compose.yaml file
+curl -LfO 'https://airflow.apache.org/docs/apache-airflow/stable/docker-compose.yaml'
+
+# Make expected directories and set an expected environment variable
+mkdir -p ./dags ./logs ./plugins
+echo -e "AIRFLOW_UID=$(id -u)" > .env
+
+# Initialize the database
+docker-compose up airflow-init
+
+# Start up all services
+docker-compose up
+
+# Admin>Connections>Add
+# Cannot see the type postgresql
+sudo apt-get install postgresql
+
+
+# still error - but not postgresql error this time
+    #  You may install a binary package by installing 'psycopg2-binary' from PyPI.
+    #  If you want to install psycopg2 from source, please install the packages
+    #  required for the build and try again.
+pip install psycopg2-binary # not 100% sure if this helped/was necessary
+sudo apt install libpq-dev # this helped
+
+
+pip install apache-airflow-providers-postgres 
+# as per https://airflow.apache.org/docs/apache-airflow-providers-postgres/stable/index.html
+pip install apache-airflow-providers-postgres[amazon]
+# giving up on this for now. The existing default postgres connection has "Email" as the type
+
+
+# problem is that I am executing within the docker container that doesn't seem to be recognizing the postgres provider install

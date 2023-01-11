@@ -76,3 +76,5 @@ ls -l -AF
 history | tail -n 50
 
 git diff HEAD
+
+sudo chown [username]:docker /var/run/docker.sock
