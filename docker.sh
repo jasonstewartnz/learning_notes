@@ -134,6 +134,10 @@ systemctl --user start docker-desktop
 sudo ls -la /var/run/docker.sock
 # srw-rw---- 1 root docker 0 Jan 11 08:24 /var/run/docker.sock
 
+docker push docker/getting-started
+#  The push refers to repository [docker.io/docker/getting-started]
+#  An image does not exist locally with the tag: docker/getting-started
+
 sudo chown jasonstewartnz:docker /var/run/docker.sock
 
 # https://phoenixnap.com/kb/cannot-connect-to-the-docker-daemon-error
@@ -142,6 +146,44 @@ sudo chown jasonstewartnz:docker /var/run/docker.sock
 # start docker desktop command (to be modified to start the docker daemon without desktop) 
 # systemctl --user start docker-desktop
 
+docker login -u jasonstewartnz # resolved password issues
+
+docker tag getting-started jasonstewartnz/getting-started
+docker image ls
+
+docker push jasonstewartnz/getting-started
+
+# ok, so I was having an issue with the credentials
+# googled, followed this post:  https://stackoverflow.com/questions/71770693/error-saving-credentials-error-storing-credentials-err-exit-status-1-out
+service docker stop
+rm ~/.docker/config.json
+service docker start
+# then relogged in with 
+docker login -u jasonstewartnz # resolved password issues
+# Password: 
+# WARNING! Your password will be stored unencrypted in /home/jasonstewartnz/.docker/config.json.
+# Configure a credential helper to remove this warning. See
+# https://docs.docker.com/engine/reference/commandline/login/#credentials-store
+
+# Login Succeeded
+
+# Logging in with your password grants your terminal complete access to your account. 
+# For better security, log in with a limited-privilege personal access token. Learn more at https://docs.docker.com/go/access-tokens/
+# @TODO go back and fix security issue by choosing the second (more secure) answer
+
+# had to then re-tag 
+docker tag getting-started jasonstewartnz/getting-started
+# and finally, push worked 
+docker push jasonstewartnz/getting-started
 
 
+
+# run on another machine using Play With Docker "playground"
+# https://docs.docker.com/get-started/04_sharing_app/#run-the-image-on-a-new-instance
+# https://labs.play-with-docker.com/
+# 1) connected account
+# 2) added instance
+# 3) in terminal ran 
+docker run -dp 3000:3000 jasonstewartnz/getting-started
+# opened port 3000 to view app
 

@@ -42,8 +42,8 @@ bash --login
 
 
 # virtual envs 
-Great article on virtual env
-https://www.infoworld.com/article/3239675/virtualenv-and-venv-python-virtual-environments-explained.html
+# Great article on virtual env
+# https://www.infoworld.com/article/3239675/virtualenv-and-venv-python-virtual-environments-explained.html
 
 
 # create
@@ -78,3 +78,14 @@ history | tail -n 50
 git diff HEAD
 
 sudo chown [username]:docker /var/run/docker.sock
+
+# initialize password holder
+pass init # fail
+# reading: https://www.passwordstore.org/
+# pass init "ZX2C4 Password Storage Key"
+
+# jasonstewartnz@pop-os:~/projects/docker/getting-started$ docker login -u jasonstewartnz
+# Password: 
+# Error saving credentials: error storing credentials - err: exit status 1, out: `error storing credentials - err: exit status 1, out: `exit status 1: gpg: ZX2C4 Password Storage Key: skipped: No public key
+# gpg: [stdin]: encryption failed: No public key
+# Password encryption aborted.``
