@@ -187,3 +187,33 @@ docker push jasonstewartnz/getting-started
 docker run -dp 3000:3000 jasonstewartnz/getting-started
 # opened port 3000 to view app
 
+## Persisting data 
+# https://docs.docker.com/get-started/05_persisting_data/
+# started process 
+docker run -d ubuntu bash -c "shuf -i 1-10000 -n 1 -o /data.txt && tail -f /dev/null"
+
+# containers don't show up in docker desktop
+# stumbled upon this post suggesting I need to set the context 
+# https://stackoverflow.com/questions/71926492/docker-desktop-not-showing-running-containers
+# todo: FURTHER reading: https://docs.docker.com/engine/context/working-with-contexts/
+
+# halted existing containers 
+# change context
+docker context use desktop-linux
+
+# start container in correct context
+docker run -d ubuntu bash -c "shuf -i 1-10000 -n 1 -o /data.txt && tail -f /dev/null"
+docker exec 1500fb01381d cat /data.txt
+
+
+## Volumes: introduction
+# Reference: https://docs.docker.com/storage/volumes/
+# execute command within the container
+docker volume create todo-db
+
+# start the container, but mount the volume
+docker run -dp 3000:3000 --mount type=volume,src=todo-db,target=/etc/todos getting-started
+
+# While running in Docker Desktop, the Docker commands are actually 
+# running inside a small VM on your machine. If you wanted to look 
+# at the actual contents of the Mount point directory, you would need to look inside of that VM.
