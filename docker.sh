@@ -265,3 +265,86 @@ docker run -dp 3000:3000 \
 # To learn more about the advanced storage concepts, see Manage data in Docker.
 
 
+# Multi-container apps / container networking
+# In general, each container should do one thing and do it well. 
+
+# Rule
+# If two containers are on the same network, they can talk to each other. 
+# If they aren’t, they can’t.
+
+docker network create todo-app
+
+docker run -d \
+     --network todo-app --network-alias mysql \
+     -v todo-mysql-data:/var/lib/mysql \
+     -e MYSQL_ROOT_PASSWORD=secret \
+     -e MYSQL_DATABASE=todos \
+     mysql:8.0
+
+
+# network-alias: alias of service ip that can be searched for on the network using dig
+# -v creates volume with name at mount location
+
+
+# view running container / get id
+docker ps 
+
+
+docker exec -it 9c51e1a7cf6f mysql -u root -p
+# password from run command
+# Welcome to the MySQL monitor.  Commands end with ; or \g.
+# Your MySQL connection id is 8
+# Server version: 8.0.31 MySQL Community Server - GPL
+
+# Copyright (c) 2000, 2022, Oracle and/or its affiliates.
+
+# Oracle is a registered trademark of Oracle Corporation and/or its
+# affiliates. Other names may be trademarks of their respective
+# owners.
+
+# Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+# mysql> 
+
+# run new container on the network
+docker run -it --network todo-app nicolaka/netshoot
+
+ 2ab61917eee8  ~  dig mysql # find service on network by ip
+
+# ; <<>> DiG 9.18.8 <<>> mysql
+# ;; global options: +cmd
+# ;; Got answer:
+# ;; ->>HEADER<<- opcode: QUERY, status: NOERROR, id: 58971
+# ;; flags: qr rd ra; QUERY: 1, ANSWER: 1, AUTHORITY: 0, ADDITIONAL: 0
+
+# ;; QUESTION SECTION:
+# ;mysql.                         IN      A
+
+# ;; ANSWER SECTION:
+# mysql.                  600     IN      A       172.18.0.2
+
+# ;; Query time: 0 msec
+# ;; SERVER: 127.0.0.11#53(127.0.0.11) (UDP)
+# ;; WHEN: Fri Jan 13 22:14:18 UTC 2023
+# ;; MSG SIZE  rcvd: 44
+
+# @todo: READ: https://blog.diogomonica.com//2017/03/27/why-you-shouldnt-use-env-variables-for-secret-data/
+# use the secret support provided by your container orchestration framework. 
+
+
+# starts app running the app, connected to the network
+docker run -dp 3000:3000 \
+   -w /app -v "$(pwd):/app" \
+   --network todo-app \
+   -e MYSQL_HOST=mysql \
+   -e MYSQL_USER=root \
+   -e MYSQL_PASSWORD=secret \
+   -e MYSQL_DB=todos \
+   node:18-alpine \
+   sh -c "yarn install && yarn run dev"
+
+
+docker exec -it 9c51e1a7cf6f mysql -p todos 
+# this is the container we started 34 minutes ago to run the db
+
+sql> select * from todo_items;
