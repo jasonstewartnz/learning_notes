@@ -217,3 +217,51 @@ docker run -dp 3000:3000 --mount type=volume,src=todo-db,target=/etc/todos getti
 # While running in Docker Desktop, the Docker commands are actually 
 # running inside a small VM on your machine. If you wanted to look 
 # at the actual contents of the Mount point directory, you would need to look inside of that VM.
+
+## Using bind mounts
+# https://docs.docker.com/get-started/06_bind_mounts/
+# google search: docker bind mount vs volume
+# 
+ # Docker manages Volumes and is usually not affected by other processes running
+ # on the same host. In contrast, Bind Mounts are just a directory on the 
+ # host file system and may be modified by other processes other than docker.
+
+ # So for example, if we wanted to trigger some particular behaviour from an 
+ # external process (e.g. Airflow controlled flag file) or inject some code at 
+ # runtime, we could use a bing mount. 
+ # When we want to ensure the integrity of some data within the context of a set
+ # of cotainers, we would use a volume mount (e.g. shared database). Still want to
+ # understand if/how we can mount an external volume such as an S3 bucket.
+
+ # https://docs.docker.com/get-started/06_bind_mounts/#quick-volume-type-comparisons
+
+ # E.g. you could have a bunch of machines waiting to perform a particular 
+ # class of tasks/requests, say data pipeline tasks they could all work
+ # with the same volume (e.g. database) to track what has been done and what is needed 
+ # to do. We wouldn't want an external resource to interfere with this, and the volume 
+ # could be called something like etl-pipeline-status (or be the airflow shared db)
+ # which would be monitored by containers from the etl-images, and other images responsible 
+ # for the management/addition of tasks, and dags, but which may be different images or
+ # different run commands for the contains that include a bind mount.
+ # TODO: Diagram this
+
+# https://docs.docker.com/storage/images/types-of-mounts-volume.png
+
+## trying out bind mounts
+docker run -it --mount type=bind,src="$(pwd)",target=/src ubuntu bash
+
+ls src # inspect contents and confirm they match to ~/projects/docker/getting-started
+
+# Run your app in a development container
+# from within getting-started/app
+docker run -dp 3000:3000 \
+    -w /app --mount type=bind,src="$(pwd)",target=/app \
+    node:18-alpine \
+    sh -c "yarn install && yarn run dev"
+
+# Using bind mounts is common for local development setups.
+
+# @todo
+# To learn more about the advanced storage concepts, see Manage data in Docker.
+
+
