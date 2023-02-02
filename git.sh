@@ -83,3 +83,10 @@ cd ~/projects
 git clone git@github.com:jasonstewartnz/gj_dbt_sandbox.git
 
 
+echo "# dash" >> README.md
+git init
+git add README.md
+git commit -m "first commit"
+git branch -M main
+git remote add origin git@github.com:jasonstewartnz/dash.git
+git push -u origin main

@@ -80,12 +80,50 @@ git diff HEAD
 sudo chown [username]:docker /var/run/docker.sock
 
 # initialize password holder
-pass init # fail
+# pass init # fail
 # reading: https://www.passwordstore.org/
-# pass init "ZX2C4 Password Storage Key"
+pass init "ZX2C4 Password Storage Key"
 
 # jasonstewartnz@pop-os:~/projects/docker/getting-started$ docker login -u jasonstewartnz
 # Password: 
 # Error saving credentials: error storing credentials - err: exit status 1, out: `error storing credentials - err: exit status 1, out: `exit status 1: gpg: ZX2C4 Password Storage Key: skipped: No public key
 # gpg: [stdin]: encryption failed: No public key
 # Password encryption aborted.``
+
+# SNOWSQL
+# Installed snowsql
+# https://docs.snowflake.com/en/user-guide/snowsql-install-config.html#installing-snowsql-on-linux-using-the-installer
+# verified signature
+
+# generate key for key value pair authentication
+# https://docs.snowflake.com/en/user-guide/key-pair-auth.html
+openssl genrsa 2048 | openssl pkcs8 -topk8 -v2 des3 -inform PEM -out rsa_key.p8
+
+openssl rsa -in rsa_key.p8 -pubout -out rsa_key.pub
+
+# Configure the client to use key-pair authentication
+# https://docs.snowflake.com/en/user-guide/snowsql-start.html#label-snowsql-key-pair-authn-rotation
+# added private_key_file to snowsql config
+snowsql -a $SNOWFLAKE_ACCOUNT -u $SNOWFLAKE_USERNAME --private-key-path ~/rsa_key.p8
+
+# Snowsql environment variable guide
+# https://docs.snowflake.com/en/user-guide/snowsql-start.html
+
+# Install snowflake connector 
+pip install -r https://raw.githubusercontent.com/snowflakedb/snowflake-connector-python/v2.9.0/tested_requirements/requirements_310.reqs
+
+
+
+# For those unaware, localhost is an alias for 127.0.0.1, while 0.0.0.0 references
+# all local IP addresses.
+# Router ip # 192.168.1.1
+
+# see ~/projects/export_project_vars.sh
+# elegant code to get a single source of truth for environment variables
+
+# ~/projects/dash for plotly dashboarding 
+
+
+
+
+

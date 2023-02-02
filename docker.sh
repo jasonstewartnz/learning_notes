@@ -1,14 +1,76 @@
 
+# SETUP
 https://docker-curriculum.com/
 install 
-https://docs.docker.com/engine/install/ubuntu/
-https://docs.docker.com/engine/install/linux-postinstall/
+https://docs.docker.com/engine/install/ubuntu/ # {{
+
+sudo apt-get update
+sudo apt-get install \
+    ca-certificates \
+    curl \
+    gnupg \
+    lsb-release
+
+sudo mkdir -p /etc/apt/keyrings
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
+
+echo \
+  "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu \
+  $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+
+
+sudo apt-get install docker-ce docker-ce-cli containerd.io docker-compose-plugin
+
+sudo docker run hello-world
+
+## }}
+
+https://docs.docker.com/engine/install/linux-postinstall/ # {{
+
+sudo groupadd docker # already added
+
+sudo usermod -aG docker $USER
+
+reboot # to recognize group membership
+
+# show group members
+members --all docker
+# or use groups to show groups I am a member of 
+groups  
 
 Groups
 /etc/group - contains config
 getent group docker
 
-not done: https://docs.docker.com/engine/install/linux-postinstall/#configure-docker-to-start-on-boot-with-systemd
+
+# configuration
+# https://docs.docker.com/engine/install/linux-postinstall/#configure-docker-to-start-on-boot-with-systemd
+
+# Configure Docker to start on boot with systemd
+# https://docs.docker.com/engine/install/linux-postinstall/#configure-docker-to-start-on-boot-with-systemd
+sudo systemctl enable docker.service
+sudo systemctl enable containerd.service
+
+# to stop this behaviour run: 
+# sudo systemctl disable docker.service
+# sudo systemctl disable containerd.service
+
+
+# }}
+
+# When starting, docker hangs
+# https://askubuntu.com/questions/1415053/docker-desktop-stuck-at-docker-desktop-starting
+# do this
+# $ echo <USER>:10000:65536 >> /etc/subuid
+# $ echo <USER>:10000:65536 >> /etc/subgid
+# permission denied, so need to do manually
+# to start vs code as root (not recommended generally for security reasons)
+sudo nano /etc/subuid
+sudo nano /etc/subgid 
+# then manually enter - this was the easiest way
+reboot 
+
+
 
 # busybox
 
@@ -348,3 +410,72 @@ docker exec -it 9c51e1a7cf6f mysql -p todos
 # this is the container we started 34 minutes ago to run the db
 
 sql> select * from todo_items;
+# connected! 
+
+
+## Docker Compose
+docker compose version
+
+# volume options: https://docs.docker.com/compose/compose-file/compose-file-v3/#volume-configuration-reference
+
+## Best practices
+# Security
+docker scan --login
+docker scan getting-started
+# Image layering
+docker image history getting-started
+# you can also quickly see the size of each layer, helping diagnose large images.
+
+# Image caching
+
+
+
+# resources / todo
+# explore containers: https://hub.docker.com/search?q=&type=image
+# apache/airflow
+# python
+# snowflake
+# docker overview https://docs.docker.com/get-started/overview/#docker-objects
+# security blog post: https://blog.diogomonica.com//2017/03/27/why-you-shouldnt-use-env-variables-for-secret-data/
+
+## python docker walk-through: https://docs.docker.com/language/python/
+
+
+
+docker image history getting-started
+
+## Docker with Jupyter 
+mkdir jupyter-docker
+cd jupyter-docker
+
+python3 -m venv env
+ls 
+source env/bin/activate
+pip install jupyter 
+# otherwise https://hub.docker.com/r/jupyter/datascience-notebook/
+
+echo env >> .gitignore
+git add .gitignore
+git commit -m "ignoring files in local"
+
+pip freeze > requirements.txt
+git add requirements.txt
+git commit -m "Add requirements file"
+
+jupyter notebook 
+
+service docker stop
+rm ~/.docker/config.json
+service docker start
+# then relogged in with 
+docker login -u jasonstewartnz # resolved password issues
+
+docker build -t jupyter .
+
+# docker run -dp 8888:8888 --mount type=bind,src="$(pwd)",target=/src jupyter 
+# navigate to 8888 / check containers 
+
+https://aws.amazon.com/getting-started/hands-on/deploy-docker-containers/
+# Want Jupyter running on AWS with allowing me access.
+# But not Sagemaker - from my image
+# with config for access allowable IP range
