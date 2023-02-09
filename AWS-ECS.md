@@ -143,3 +143,19 @@ Yes - I see points here - suggesting issue is coming from Load Balancer
 Updated load balancer security group/ACL setting to allow port 8888 for our security group which shows up in the drop-down dynamically
 
 Health check killed my application as it was checking port 8888 which was already in use. Need to set something up so that it responds on another port.
+
+# Usng classic mode (not new experience), view the service
+# the security group is associated with the service: 
+# Currently using: sg-03f82864 (default) 
+# need to create a new security group
+hdash-service-security-group
+ID: sgr-0b6ae2f33c06e925d
+sg-0f6c787f965a74d31
+
+hdash-load-balancer-security-group
+sg-092fb9d6a04024c60
+
+# YOU CANNOT UPDATE THE SECURITY GROUP AFTER THE SERVICE HAS BEEN CREATED
+trying override health check port
+
+HAD THE WRONG SECURITY GROUP SELECTED FOR ALB!! 
